@@ -46,8 +46,8 @@ def roll_the_dice(rolls : int, roll_list : list, reroll_list : list) -> list:
         for i in range (0,reroll_num):
             j = int(reroll_list[i])
             roll_list[j-1] = random.randint(1,6)
-            # roll_list = [2,2,2,2,2] # Manual control of reroll dice values
-    # roll_list = [3,3,3,3,3] # Manual control of set dice values  # This one never really works right, only applied to first roll instead of all three.
+        # roll_list = [2,2,2,2,2] # Manual control of reroll dice values
+    # roll_list = [3,3,3,3,3] # Manual control of set dice values
     return roll_list
 
 def count_numbers(roll_list : list) -> list:
@@ -120,8 +120,7 @@ def yahtzee_test(roll_list : list) -> bool:
     for i in range(0,6):
         if number_count[i] == 5:
             return 1
-        else:
-            return 0
+    return 0
 
 def setup_dice_numbers(delay : float):
     time.sleep(delay)
@@ -159,7 +158,7 @@ def rolling_animation(roll : list, reroll_list : list):
             show_roll(roll, 0.0125)
             roll = []
     else:
-        temp_roll = roll
+        temp_roll = roll.copy()
         reroll_count = len(reroll_list)
         rotes = random.randint(15,20)
         for spins in range (0, rotes):
@@ -259,7 +258,8 @@ def yahtzee_score(player) -> int:
     except (KeyError):
         return 1
 
-def present_dice(player, roll : list, roll_num : int, reroll_list : list, show_animation : bool):
+def present_dice(player, current_roll : list, roll_num : int, reroll_list : list, show_animation : bool):
+    roll = current_roll.copy()
     cursor.set_cursor_visible(False)
     if roll_num == 1:
         x_centering = 31
@@ -388,7 +388,7 @@ def take_your_turn(player_list : list, rounds : int):
         roll_num = 1
         present_dice(player, first_roll, roll_num, reroll_list, True)
         reroll_list = reroll_func(first_roll)
-        roll = first_roll
+        roll = first_roll.copy()
         if reroll_list != []:
             if yahtzee_test(roll) == 1:
                 if yahtzee_score(player) == 1:
@@ -400,9 +400,9 @@ def take_your_turn(player_list : list, rounds : int):
                 winterm.erase_screen(mode=2)
                 second_roll = roll_the_dice(dice_number, first_roll, reroll_list)
                 roll_num = 2
-                present_dice(player, second_roll, roll_num,reroll_list, True)
+                present_dice(player, second_roll, roll_num, reroll_list, True)
                 reroll_list = reroll_func(second_roll)
-                roll = second_roll
+                roll = second_roll.copy()
                 if reroll_list != []:
                     if yahtzee_test(roll) == 1:
                         if yahtzee_score(player) > 0:
@@ -416,7 +416,7 @@ def take_your_turn(player_list : list, rounds : int):
                             third_roll = roll_the_dice(dice_number, second_roll, reroll_list)
                             roll_num = 3
                             present_dice(player, third_roll, roll_num, reroll_list, True)
-                            roll = third_roll
+                            roll = third_roll.copy()
         print()
         print()
         print("Which category do you choose?")
