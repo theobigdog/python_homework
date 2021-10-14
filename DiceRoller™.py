@@ -2,7 +2,7 @@
 import random
 import time
 import sys
-sys.path.insert(1, './bubs')
+# sys.path.insert(1, './bubs')
 import cursor
 import colorama
 from colorama import Fore, Back, Style, Cursor, win32, init
